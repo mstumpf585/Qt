@@ -35,7 +35,7 @@ ApplicationWindow {
             width: 80
             height: 20
             color: "#fbfbfb"
-            text: qsTr("title")
+            text: qsTr("1")
             clip: false
             opacity: 1
             horizontalAlignment: Text.AlignHCenter
@@ -50,6 +50,8 @@ ApplicationWindow {
             width: 61
             height: 21
             text: qsTr("play")
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             onClicked: {
                 window.qmlRequireData(movieInput.text)
             }
