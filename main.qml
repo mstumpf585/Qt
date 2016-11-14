@@ -11,20 +11,22 @@ ApplicationWindow {
     title: qsTr("Hello World")
 
     //signal
+    //to my knowledge we only need one signal as multiple signals gave me runtime errors
     signal qmlRequireData(string msg)
-    signal qmlRequireData1(string title)
-    signal qmlRequireData2(string price)
-    signal qmlRequireData3(string time)
     //slot
+    //a function for each slot that we know that we are going to want updated
     function qmlUpdateData(text){
         movieInput.text=text
+    }
+    function qmlUpdateTitle(text){
         movieTitleOutput.text=text
     }
-    /*
-    function qmlUpdateData1(text){
-        movieTitleOutput.text=text
+    function qmlUpdatePrice(text){
+        movieCostOutput.text=text
     }
-    */
+    function qmlUpdateTime(text){
+        movieRentedOutput.text=text
+    }
 
 
     Image {
@@ -63,8 +65,9 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             onClicked: {
+                //this will run RequireData which will update all of the other fields
+                //in the process of executing
                 window.qmlRequireData(movieInput.text)
-                window.qmlRequireData1(movieTitleOutput.text)
             }
 
         }
