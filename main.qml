@@ -12,10 +12,20 @@ ApplicationWindow {
 
     //signal
     signal qmlRequireData(string msg)
+    signal qmlRequireData1(string title)
+    signal qmlRequireData2(string price)
+    signal qmlRequireData3(string time)
     //slot
     function qmlUpdateData(text){
         movieInput.text=text
+        movieTitleOutput.text=text
     }
+    /*
+    function qmlUpdateData1(text){
+        movieTitleOutput.text=text
+    }
+    */
+
 
     Image {
         id: image1
@@ -54,8 +64,72 @@ ApplicationWindow {
             anchors.verticalCenter: parent.verticalCenter
             onClicked: {
                 window.qmlRequireData(movieInput.text)
+                window.qmlRequireData1(movieTitleOutput.text)
             }
 
+        }
+
+        Text {
+            id: movieTitleOutput
+            x: 215
+            y: 277
+            width: 210
+            height: 21
+            color: "#fbfbfb"
+            font.pixelSize: 12
+        }
+
+        Text {
+            id: movieTitle
+            x: 124
+            y: 277
+            width: 65
+            height: 21
+            color: "#fbfbfb"
+            text: "Movie Title"
+            font.pixelSize: 12
+        }
+
+        Text {
+            id: movieCost
+            x: 124
+            y: 316
+            width: 65
+            height: 21
+            color: "#fbfbfb"
+            text: "Movie Cost"
+            font.pixelSize: 12
+        }
+
+        Text {
+            id: movieRented
+            x: 124
+            y: 358
+            width: 65
+            height: 21
+            color: "#fbfbfb"
+            text: "Last Rented"
+            font.pixelSize: 12
+        }
+
+        Text {
+            id: movieCostOutput
+            x: 215
+            y: 316
+            width: 210
+            height: 21
+            color: "#fbfbfb"
+            font.pixelSize: 12
+        }
+
+        Text {
+            id: movieRentedOutput
+            x: 215
+            y: 358
+            width: 210
+            height: 21
+            color: "#fbfbfb"
+            font.pixelSize: 12
         }
     }
 

@@ -25,6 +25,5 @@ int main(int argc, char *argv[])
     //Connect from C++ to QML
     QObject::connect(&myclass, SIGNAL(cppReturnAnswer(QVariant)),
                      window, SLOT(qmlUpdateData(QVariant)));
-
     return app.exec();
 }
