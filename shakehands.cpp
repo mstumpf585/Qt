@@ -2,8 +2,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QVector>
-
-
+#include <QTime>
 
 typedef struct {
     QString title;
@@ -26,6 +25,7 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
     static QVector <movie> even;
     static QVector <movie> odd;
+    int randomNumber=0;
     readFile(even, odd);
     QString myText;
     QString movieTitle;
@@ -37,10 +37,14 @@ void ShakeHands::cppGetRequest(const QString &msg){
     //if a valid number is entered
     if(((msg.toInt()) %2==0)||((msg.toInt()) %2==1)){
 
+        qsrand(static_cast<uint>(QTime::currentTime().msec()));
+
         //do even things
         if(((msg.toInt()) %2==0) && (msg.toInt() != 0)){
 
-            int randomNumber=0;
+
+
+
             randomNumber = rand()%(even.length());
             std::string text = "Even";
 
@@ -59,7 +63,7 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
         //do odd things
         if(((msg.toInt())%2==1)&& (msg.toInt() != 0)){
-            int randomNumber=0;
+
             randomNumber = rand()%(odd.length());
             std::string text = "Odd";
 
