@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     //Connect from QML to C++
     QObject::connect(window, SIGNAL(qmlRequireData(QString)),
                      &myclass, SLOT(cppGetRequest(QString)));
+
     //each slot requires a connection to be made, hence the five connections
     //Connect from C++ to QML
     QObject::connect(&myclass, SIGNAL(cppReturnAnswer(QVariant)),

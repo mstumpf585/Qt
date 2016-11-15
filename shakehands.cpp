@@ -2,8 +2,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QVector>
-
-
+#include <QTime>
 
 typedef struct {
     QString title;
@@ -13,11 +12,12 @@ typedef struct {
 } movie;
 
 void readFile(QVector <movie> &even, QVector <movie> &odd);
+
 QString getTime();
+
 std::string getCmdOutput(const std::string& mStr);
 
-ShakeHands::ShakeHands(QObject *parent) :
-    QObject(parent)
+ShakeHands::ShakeHands(QObject *parent) :QObject(parent)
 {
 }
 
@@ -25,6 +25,7 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
     static QVector <movie> even;
     static QVector <movie> odd;
+    int randomNumber=0;
     readFile(even, odd);
     QString myText;
     QString movieTitle;
@@ -35,39 +36,51 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
     //if a valid number is entered
     if(((msg.toInt()) %2==0)||((msg.toInt()) %2==1)){
+
+        qsrand(static_cast<uint>(QTime::currentTime().msec()));
+
         //do even things
         if(((msg.toInt()) %2==0) && (msg.toInt() != 0)){
-            int randomNumber=0;
+
+
+
+
             randomNumber = rand()%(even.length());
             std::string text = "Even";
+
             myText = QString::fromStdString(text);
+
             movieTitle = even[randomNumber].title;
             moviePrice = even[randomNumber].price;
-            //movieTime = even[randomNumber].time;
             movieTime = getTime();
+
             // this is the spot where we need to run our script to get the time
             //then safe it in the movie vector
             qDebug()<< getTime();
             even[randomNumber].time = getTime();
             qDebug()<< even[randomNumber].time;
         }
+
         //do odd things
         if(((msg.toInt())%2==1)&& (msg.toInt() != 0)){
-            int randomNumber=0;
+
             randomNumber = rand()%(odd.length());
             std::string text = "Odd";
+
             myText = QString::fromStdString(text);
+
             movieTitle = odd[randomNumber].title;
             moviePrice = odd[randomNumber].price;
-            movieTime = odd[randomNumber].time;
+            movieTime  = getTime();
+
             // this is the spot where we need to run our script to get the time
             //then safe it in the movie vector
             odd[randomNumber].time = getTime();
         }
-    }
-    //input not valid
-    else
-    {
+
+    }else{
+
+        //input not valid
         std::string text = "Sorry, but that's not a valid option.";
         myText = QString::fromStdString(text);
     }
@@ -79,17 +92,20 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
     //this one will not be necessary when fully functional. left in for testing purposes
     emit cppReturnAnswer(QVariant(myText));
+
     //send movie title
     emit cppReturnTitle(QVariant(movieTitle));
+
     //send movie price
     emit cppReturnPrice(QVariant(moviePrice));
+
     //send movie last rented ( need to write the script that gets current time for that to work.
     emit cppReturnTimeRented(QVariant(movieTime));
 }
 
 QString getTime(){
     QString returnValue;
-    std::string text = getCmdOutput("~/Desktop/Qt/myTime.sh");
+    std::string text = getCmdOutput("/home/michael/lab04again/myTime.sh");
     returnValue = QString::fromStdString(text);
     return returnValue;
 }
@@ -115,9 +131,12 @@ std::string getCmdOutput(const std::string& mStr)
 
 void readFile(QVector <movie> &even, QVector <movie> &odd){
 
-    QFile file("/home/kevin/Desktop/Qt/input.txt");
+   //QFile file("/home/kevin/Desktop/Qt/input.txt");
+    QFile file("/home/michael/lab04again/input.txt");
+
+
     if(!file.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "Could not open file";
+        qDebug() << "Could not open file to read";
         return;
     }
 

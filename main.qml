@@ -134,6 +134,18 @@ ApplicationWindow {
             color: "#fbfbfb"
             font.pixelSize: 12
         }
+
+        Button {
+            id: button1
+            x: 509
+            y: 427
+            text: qsTr("Done")
+            onClicked: {
+                //this will run RequireData which will update all of the other fields
+                //in the process of executing
+                window.close();
+            }
+        }
     }
 
 
