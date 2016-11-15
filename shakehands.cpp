@@ -67,7 +67,7 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
             movieTitle = odd[randomNumber].title;
             moviePrice = odd[randomNumber].price;
-            movieTime  = odd[randomNumber].time;
+            movieTime  = getTime();
 
             // this is the spot where we need to run our script to get the time
             //then safe it in the movie vector
