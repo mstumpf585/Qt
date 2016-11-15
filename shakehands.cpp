@@ -4,6 +4,8 @@
 #include <QVector>
 #include <QTime>
 
+
+
 typedef struct {
     QString title;
     QString time;
@@ -12,21 +14,24 @@ typedef struct {
 } movie;
 
 void readFile(QVector <movie> &even, QVector <movie> &odd);
-
 QString getTime();
-
 std::string getCmdOutput(const std::string& mStr);
 
-ShakeHands::ShakeHands(QObject *parent) :QObject(parent)
+ShakeHands::ShakeHands(QObject *parent) :
+    QObject(parent)
 {
 }
 
+static int doOnce =0;
+
 void ShakeHands::cppGetRequest(const QString &msg){
+
 
     static QVector <movie> even;
     static QVector <movie> odd;
-    int randomNumber=0;
+    if(doOnce <1){
     readFile(even, odd);
+    }
     QString myText;
     QString movieTitle;
     QString moviePrice;
@@ -36,51 +41,32 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
     //if a valid number is entered
     if(((msg.toInt()) %2==0)||((msg.toInt()) %2==1)){
-
+        int randomNumber=0;
         qsrand(static_cast<uint>(QTime::currentTime().msec()));
 
         //do even things
         if(((msg.toInt()) %2==0) && (msg.toInt() != 0)){
-
-
-
-
             randomNumber = rand()%(even.length());
-            std::string text = "Even";
-
-            myText = QString::fromStdString(text);
-
             movieTitle = even[randomNumber].title;
             moviePrice = even[randomNumber].price;
-            movieTime = getTime();
-
-            // this is the spot where we need to run our script to get the time
-            //then safe it in the movie vector
-            qDebug()<< getTime();
+            movieTime = even[randomNumber].time;
             even[randomNumber].time = getTime();
             qDebug()<< even[randomNumber].time;
         }
-
         //do odd things
         if(((msg.toInt())%2==1)&& (msg.toInt() != 0)){
 
             randomNumber = rand()%(odd.length());
-            std::string text = "Odd";
-
-            myText = QString::fromStdString(text);
-
             movieTitle = odd[randomNumber].title;
             moviePrice = odd[randomNumber].price;
-            movieTime  = getTime();
-
-            // this is the spot where we need to run our script to get the time
-            //then safe it in the movie vector
+            movieTime = odd[randomNumber].time;
             odd[randomNumber].time = getTime();
+            qDebug()<< odd[randomNumber].time;
         }
-
-    }else{
-
-        //input not valid
+    }
+    //input not valid
+    else
+    {
         std::string text = "Sorry, but that's not a valid option.";
         myText = QString::fromStdString(text);
     }
@@ -92,20 +78,17 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
     //this one will not be necessary when fully functional. left in for testing purposes
     emit cppReturnAnswer(QVariant(myText));
-
     //send movie title
     emit cppReturnTitle(QVariant(movieTitle));
-
     //send movie price
     emit cppReturnPrice(QVariant(moviePrice));
-
     //send movie last rented ( need to write the script that gets current time for that to work.
     emit cppReturnTimeRented(QVariant(movieTime));
 }
 
 QString getTime(){
     QString returnValue;
-    std::string text = getCmdOutput("/home/michael/lab04again/myTime.sh");
+    std::string text = getCmdOutput("/home/kevin/Desktop/Qt/myTime.sh");
     returnValue = QString::fromStdString(text);
     return returnValue;
 }
@@ -131,14 +114,12 @@ std::string getCmdOutput(const std::string& mStr)
 
 void readFile(QVector <movie> &even, QVector <movie> &odd){
 
-   //QFile file("/home/kevin/Desktop/Qt/input.txt");
-    QFile file("/home/michael/lab04again/input.txt");
-
-
+    QFile file("/home/kevin/Desktop/Qt/input.txt");
     if(!file.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "Could not open file to read";
+        qDebug() << "Could not open file";
         return;
     }
+    doOnce++;
 
     movie M;
     QString line;
@@ -160,12 +141,14 @@ void readFile(QVector <movie> &even, QVector <movie> &odd){
         if(i%2 == 0){
             M.title = fields.front();
             M.price = fields.back();
+            M.time = getTime();
             even.push_back(M);
             evenCount ++;
         }
         if(i%2 == 1){
             M.title = fields.front();
             M.price = fields.back();
+            M.time = getTime();
             odd.push_back(M);
             oddCount++;
         }
