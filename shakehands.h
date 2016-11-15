@@ -18,6 +18,7 @@ class ShakeHands : public QObject
         void cppReturnTitle(QVariant data);
         void cppReturnPrice(QVariant data);
         void cppReturnTimeRented(QVariant data);
+
     public slots:
         void cppGetRequest(const QString &msg);
 
