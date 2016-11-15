@@ -8,7 +8,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("Random Movie")
 
     //signal
     //to my knowledge we only need one signal as multiple signals gave me runtime errors
@@ -59,9 +59,9 @@ ApplicationWindow {
             id: play
             x: 290
             y: 230
-            width: 61
+            width: 81
             height: 21
-            text: qsTr("play")
+            text: qsTr("Get Movie")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             onClicked: {
@@ -137,16 +137,13 @@ ApplicationWindow {
 
         Button {
             id: button1
-            x: 509
-            y: 427
-            text: qsTr("Done")
+            x: 517
+            y: 34
+            text: qsTr("Exit")
             onClicked: {
-                //this will run RequireData which will update all of the other fields
-                //in the process of executing
                 window.close();
             }
         }
+
     }
-
-
 }
