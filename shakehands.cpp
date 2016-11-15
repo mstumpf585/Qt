@@ -13,6 +13,8 @@ typedef struct {
 } movie;
 
 void readFile(QVector <movie> &even, QVector <movie> &odd);
+QString getTime();
+std::string getCmdOutput(const std::string& mStr);
 
 ShakeHands::ShakeHands(QObject *parent) :
     QObject(parent)
@@ -21,8 +23,8 @@ ShakeHands::ShakeHands(QObject *parent) :
 
 void ShakeHands::cppGetRequest(const QString &msg){
 
-    QVector <movie> even;
-    QVector <movie> odd;
+    static QVector <movie> even;
+    static QVector <movie> odd;
     readFile(even, odd);
     QString myText;
     QString movieTitle;
@@ -41,12 +43,13 @@ void ShakeHands::cppGetRequest(const QString &msg){
             myText = QString::fromStdString(text);
             movieTitle = even[randomNumber].title;
             moviePrice = even[randomNumber].price;
-            movieTime = even[randomNumber].time;
+            //movieTime = even[randomNumber].time;
+            movieTime = getTime();
             // this is the spot where we need to run our script to get the time
             //then safe it in the movie vector
-            //even[randomNumber].time = functionGetTime();
-
-
+            qDebug()<< getTime();
+            even[randomNumber].time = getTime();
+            qDebug()<< even[randomNumber].time;
         }
         //do odd things
         if(((msg.toInt())%2==1)&& (msg.toInt() != 0)){
@@ -59,7 +62,7 @@ void ShakeHands::cppGetRequest(const QString &msg){
             movieTime = odd[randomNumber].time;
             // this is the spot where we need to run our script to get the time
             //then safe it in the movie vector
-            //odd[randomNumber].time = functionGetTime();
+            odd[randomNumber].time = getTime();
         }
     }
     //input not valid
@@ -82,6 +85,32 @@ void ShakeHands::cppGetRequest(const QString &msg){
     emit cppReturnPrice(QVariant(moviePrice));
     //send movie last rented ( need to write the script that gets current time for that to work.
     emit cppReturnTimeRented(QVariant(movieTime));
+}
+
+QString getTime(){
+    QString returnValue;
+    std::string text = getCmdOutput("~/Desktop/Qt/myTime.sh");
+    returnValue = QString::fromStdString(text);
+    return returnValue;
+}
+
+//found from stack overflow, calling bash scripts is easy
+//getting them to give you a return value is the awful part
+std::string getCmdOutput(const std::string& mStr)
+{
+    std::string result, file;
+    FILE* pipe{popen(mStr.c_str(), "r")};
+    char buffer[256];
+
+    while(fgets(buffer, sizeof(buffer), pipe) != NULL)
+    {
+        file = buffer;
+        result += file.substr(0, file.size() - 1);
+    }
+
+    pclose(pipe);
+    return result;
+
 }
 
 void readFile(QVector <movie> &even, QVector <movie> &odd){
