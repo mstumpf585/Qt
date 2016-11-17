@@ -88,7 +88,8 @@ void ShakeHands::cppGetRequest(const QString &msg){
 
 QString getTime(){
     QString returnValue;
-    std::string text = getCmdOutput("/home/kevin/Desktop/Qt/myTime.sh");
+    //std::string text = getCmdOutput("/home/kevin/Desktop/Qt/myTime.sh");
+    std::string text = getCmdOutput("/home/michael/lab04again/myTime.sh");
     returnValue = QString::fromStdString(text);
     return returnValue;
 }
@@ -114,7 +115,8 @@ std::string getCmdOutput(const std::string& mStr)
 
 void readFile(QVector <movie> &even, QVector <movie> &odd){
 
-    QFile file("/home/kevin/Desktop/Qt/input.txt");
+    //QFile file("/home/kevin/Desktop/Qt/input.txt");
+    QFile file("/home/michael/lab04again/input.txt");
     if(!file.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "Could not open file";
         return;
