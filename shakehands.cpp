@@ -143,14 +143,14 @@ void readFile(QVector <movie> &even, QVector <movie> &odd){
         if(i%2 == 0){
             M.title = fields.front();
             M.price = fields.back();
-            M.time = getTime();
+            M.time = "Never Rented";
             even.push_back(M);
             evenCount ++;
         }
         if(i%2 == 1){
             M.title = fields.front();
             M.price = fields.back();
-            M.time = getTime();
+            M.time = "Never Rented";
             odd.push_back(M);
             oddCount++;
         }
